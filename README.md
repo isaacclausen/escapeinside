@@ -1,2 +1,2 @@
-# escapeinside
-Webpage for escape inside site
+# isaacclausen.github.io
+Website for Isaac
