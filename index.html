@@ -200,6 +200,11 @@
         box-shadow: 0 8px 16px rgba(0,0,0,0.2);
       }
 
+      .event-date-bar {
+        display: none;
+      } 
+
+
 
       @media (max-width: 600px) {
         .events-table {
@@ -219,8 +224,8 @@
           border-radius: 14px;
           box-shadow: 0 4px 16px rgba(0,0,0,0.10);
           margin-bottom: 1.5rem;
-          padding: 1.2rem 1rem 1.5rem 1rem;
-
+          padding: 3em 1rem 1.5rem 1rem;
+          position: relative;
           align-items: center;
         }
         .events-table td {
@@ -236,22 +241,42 @@
           text-align: left;
           background: none;
         }
+        .events-table tr > td:first-of-type {
+          display: none;
+        }
         .events-table td:last-child {
           display: flex;
           justify-content: center;
-          padding-top: 1.2rem;
+          padding-top: 1rem;
           margin-bottom: 0;
         }
-        .events-table td:nth-child(2) {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: #222;
+        .events-table td:nth-child(3) {
+          font-size: 1rem;
           padding-right: 1rem;
         }
+        .events-table td:nth-child(4) {
+          font-size: .8rem;
+        }
         .events-table td a {
-          font-size: 1.3rem;
+          font-size: .9rem;
           padding: 0.7rem 1.7rem;
           max-width: 150px;
+        }
+
+        .event-date-bar {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          background: #7c3f2c;
+          color: #fff;
+          font-weight: bold;
+          font-size: 1rem;
+          border-top-left-radius: 14px;
+          border-top-right-radius: 14px;
+          padding: 0.6em 0.5em;
+          box-sizing: border-box;
         }
       }
           </style>
@@ -329,7 +354,8 @@
               const eventId = encodeURIComponent(event.id);
 
               row.innerHTML = `
-                <td data-label=""><span style="font-weight: 300;">${date}</span></td>
+                <div class="event-date-bar">${date}</div>
+                <td data-label="">${date}</td>
                 <td data-label="">
                   <span style="vertical-align:0.1em; margin-right:0em;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="#b09c6a" viewBox="0 0 24 24" style="vertical-align:middle;">
