@@ -11,6 +11,7 @@
         margin: 0;
         padding: 0;
         min-height: 100vh;
+        overflow-x: hidden;
       }
 
       /* 🖼 Banner container with relative positioning */
@@ -81,11 +82,11 @@
       .content {
         text-align: center;
         padding-bottom: 2rem ;
-        padding:1rem;
+        padding: 1rem;
         background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(10px);
         border-radius: 15px;
-        width: 90%;
+        width: 83%;
         max-width: 1070px;
         margin: 1rem auto 2rem auto;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -112,20 +113,18 @@
       }
 
       .events-table {
-        width: 95%;
-        max-width: 900px;
+        width: 90%;
         margin: 1rem auto;
-        border-collapse: collapse;
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+        border-radius: 14px;
+        border: 1px solid transparent; /* Needed for border-radius to work with separate */
+        border-collapse: separate;
+        border-spacing: 0;
+        background: #fff;
       }
 
       .events-table th, .events-table td {
-        padding: 1rem;
+        padding: .8rem;
         text-align: left;
         border-bottom: 1px solid #ddd;
       }
@@ -134,17 +133,37 @@
         background-color: #f7f4ec;
         font-weight: bold;
       }
+      .events-table thead th:first-child {
+        border-top-left-radius: 14px;
+      }
+
+      .events-table thead th:last-child {
+        border-top-right-radius: 14px;
+      }
+
+      .events-table tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 14px;
+      }
+
+      .events-table tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 14px;
+      }
+      .events-table tr:last-child td {
+        border-bottom: none;
+      }
 
       .events-table tbody tr:hover {
         background-color: #f0ece1;
       }
 
       .book-link {
-        display: inline-block;
+        display: block;
         background-color: #2b2b2b;
         color: #EBE3CC;
-        padding: 0.5rem 0.7rem;
-        border-radius: 4px;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        max-width: 100px;
+        border-radius: 17px;
         text-align: center;
         text-decoration: none;
         font-weight: bold;
@@ -181,96 +200,155 @@
         box-shadow: 0 8px 16px rgba(0,0,0,0.2);
       }
 
-    </style>
-  </head>
-  <body>
-    <!-- 🖼️ Banner with overlay -->
-    <div class="banner-container">
-      <img src="Exterior.png" alt="Escape Room Exterior" class="banner" />
-      <div class="overlay-nav">
-        <img src="Escape Inside Logo Light No Tagline.svg" alt="Escape Inside Logo Light" />
-        <div class="nav-links">
-          <a href="booking.html">Book Now</a>
-          <a href="#">About</a>
-          <a href="#">Contact</a>
-        </div>
-      </div>
-    </div>
 
-    <!-- 🎯 Main Content -->
-    <img src="Escape Inside Logo.svg" alt="Escape Inside Logo" class="logo" />
-    <div class="content">
-      <h1>Let the adventure come to you!</h1>
-      <p>Escape inside is a work in progress mobile escape room with the goal of bringing escape room adventures to your event. Check here for upcoming events that we will be attending, or send us a message if you are interested in having Escape Inside at your next gathering!</p>
-    </div>
-    
-    <!-- 📸 Image Gallery -->
-    <div class="image-gallery">
-      <img src="Exterior1.jpg" alt="Escape Inside Mobile Unit 1" />
-      <img src="Exterior2.jpg" alt="Escape Inside Mobile Unit 2" />
-      <img src="Exterior3.jpg" alt="Escape Inside Mobile Unit 3" />
-    </div>
-    
-    <div class="content events-section">
-      <h2>Upcoming Public Events</h2>
-      <table class="events-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Location</th>
-            <th>Event Name</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="events-body">
-          <!-- Events will be inserted here -->
-        </tbody>
-      </table>
-    </div>
-    
-    
-    
-    <script>
-    
-      fetch(`https://escape-calendar-proxy.isaacclausen.workers.dev?calendarId=9ccddeec24fa50c0880827217c1897b6d15b492d8d1519973aa7db19b0096992@group.calendar.google.com`)
-    .then(res => res.json())
-    .then(data => {
-      const events = data.items || [];
-      const section = document.querySelector('.events-section');
-      const tableBody = document.getElementById('events-body');
+      @media (max-width: 600px) {
+        .events-table {
+          box-shadow: none;
+          background: none;
+        }
+        .events-table, .events-table thead {
+          display: none;
+        }
+        .events-table, .events-table tbody {
+          display: block;
+        }
+        .events-table tr {
+          display: flex;
+          flex-direction: column;
+          background: #fff;
+          border-radius: 14px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+          margin-bottom: 1.5rem;
+          padding: 1.2rem 1rem 1.5rem 1rem;
 
-      if (events.length === 0) {
-        section.style.display = 'none';
-        return;
+          align-items: center;
+        }
+        .events-table td {
+          display: block;
+          border: none;
+          border-bottom: none;
+          padding: 0.2rem 0;
+          font-size: 1.08rem;
+          color: #293338;
+          font-weight: 600;
+          position: relative;
+          margin-bottom: 0.2rem;
+          text-align: left;
+          background: none;
+        }
+        .events-table td:last-child {
+          display: flex;
+          justify-content: center;
+          padding-top: 1.2rem;
+          margin-bottom: 0;
+        }
+        .events-table td:nth-child(2) {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #222;
+          padding-right: 1rem;
+        }
+        .events-table td a {
+          font-size: 1.3rem;
+          padding: 0.7rem 1.7rem;
+          max-width: 150px;
+        }
       }
+          </style>
+        </head>
+        <body>
+          <!-- 🖼️ Banner with overlay -->
+          <div class="banner-container">
+            <img src="Exterior.png" alt="Escape Room Exterior" class="banner" />
+            <div class="overlay-nav">
+              <img src="Escape Inside Logo Light No Tagline.svg" alt="Escape Inside Logo Light" />
+              <div class="nav-links">
+                <a href="booking.html">Book Now</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+              </div>
+            </div>
+          </div>
 
-      events.forEach(event => {
-        const row = document.createElement('tr');
-        const rawDate = new Date(event.start.dateTime || event.start.date);
-        const date = rawDate.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
+          <!-- 🎯 Main Content -->
+          <img src="Escape Inside Logo.svg" alt="Escape Inside Logo" class="logo" />
+          <div class="content">
+            <h1>Let the adventure come to you!</h1>
+            <p>Reformat and edit this to include location, travel distance, and other information. Escape inside is a work in progress mobile escape room with the goal of bringing escape room adventures to your event. Check here for upcoming events that we will be attending, or send us a message if you are interested in having Escape Inside at your next gathering!</p>
+          </div>
+          
+          <!-- 📸 Image Gallery -->
+          <div class="image-gallery">
+            <img src="Exterior1.jpg" alt="Escape Inside Mobile Unit 1" />
+            <img src="Exterior2.jpg" alt="Escape Inside Mobile Unit 2" />
+            <img src="Exterior3.jpg" alt="Escape Inside Mobile Unit 3" />
+          </div>
+          
+          <div class="content events-section">
+            <h2>Upcoming Public Events</h2>
+            <table class="events-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Location</th>
+                  <th>Event Name</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="events-body">
+                <!-- Events will be inserted here -->
+              </tbody>
+            </table>
+          </div>
+      
+          <script>
+          
+          fetch(`https://escape-calendar-proxy.isaacclausen.workers.dev?calendarId=9ccddeec24fa50c0880827217c1897b6d15b492d8d1519973aa7db19b0096992@group.calendar.google.com`)
+          .then(res => res.json())
+          .then(data => {
+            const events = data.items || [];
+            const section = document.querySelector('.events-section');
+            const tableBody = document.getElementById('events-body');
 
-        const location = event.location || 'TBD';
-        const name = event.summary || 'Untitled Event';
-        const eventId = encodeURIComponent(event.id);
+            if (events.length === 0) {
+              section.style.display = 'none';
+              return;
+            }
 
-        row.innerHTML = `
-          <td>${date}</td>
-          <td>${location}</td>
-          <td>${name}</td>
-          <td><a href="booking.html?event=${eventId}" class="book-link">Book Now</a></td>
-        `;
-        tableBody.appendChild(row);
-      });
-    })
-    .catch(err => {
-      console.error('Error loading calendar events:', err);
-      document.querySelector('.events-section').style.display = 'none';
-    });
-</script>
-    
-  </body>
-</html>
+            events.forEach(event => {
+              const row = document.createElement('tr');
+              const rawDate = new Date(event.start.dateTime || event.start.date);
+              const date = rawDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+
+              const location = event.location || 'TBD';
+              const name = event.summary || 'Untitled Event';
+              const eventId = encodeURIComponent(event.id);
+
+              row.innerHTML = `
+                <td data-label=""><span style="font-weight: 300;">${date}</span></td>
+                <td data-label="">
+                  <span style="vertical-align:0.1em; margin-right:0em;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="#b09c6a" viewBox="0 0 24 24" style="vertical-align:middle;">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/>
+                    </svg>
+                  </span>
+                  <span style="color:#222;">${location}</span>
+                </td>
+                <td data-label="">${name}</td>                
+                <td data-label=""><a href="booking.html?event=${eventId}" class="book-link">Book Now</a></td>
+              `;
+              tableBody.appendChild(row);
+            });
+          })
+          .catch(err => {
+            console.error('Error loading calendar events:', err);
+            document.querySelector('.events-section').style.display = 'none';
+          });
+      </script>
+          
+        </body>
+      </html>
