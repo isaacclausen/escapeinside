@@ -48,14 +48,14 @@
         .container {
             max-width: 800px;
             margin: 2rem auto;
-            padding: 0 2rem;
+            padding: 0 1rem;
         }
 
         .booking-card {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 2rem;
+            padding: 1rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             margin-bottom: 2rem;
@@ -65,7 +65,7 @@
             color: #2b2b2b;
             text-align: center;
             font-size: 1.5rem;
-            margin-bottom: 2rem;
+            margin:0.5rem 0rem;
             background: linear-gradient(45deg, #2b2b2b, #555);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -97,9 +97,6 @@
         }
         .change-event-btn:hover {
             background: #ddd;
-        }
-        @media (max-width: 600px) {
-
         }
 
         .event-selection {
@@ -232,6 +229,13 @@
             color: #2b2b2b;
         }
 
+        .summary {
+            background: #f0f8ff;
+            padding: .7rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
         .booking-form {
             display: none;
             animation: fadeIn 0.5s ease-in;
@@ -282,12 +286,6 @@
         }
         .name-fields > div {
             flex: 1 1 0;
-        }
-        @media (max-width: 600px) {
-            .name-fields {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
         }
 
         .people-selector {
@@ -378,6 +376,14 @@
             align-items: center;
             margin-bottom: 2rem;
             gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.95);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
         .step {
@@ -426,6 +432,10 @@
         .step.completed + .step-connector {
             background: #4CAF50;
         }
+        .step-indicator.stuck {
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+            }
 
         .confirmation-overlay {
             position: fixed;
@@ -519,10 +529,37 @@
             }
 
             .step-indicator {
+                flex-direction: row;
+                gap: 0rem;
+                justify-content: center;
+                align-items: flex-start;
+                padding: .7rem;
+            }
+            .step {
+                flex-direction: column;
+                align-items: center;
+                
+            }
+            .step span {
+                font-size: 0.8rem;
+                margin-top: 0rem;
+                text-align: center;
+                display: block;
+                line-height: 1.2;
+                
+            }
+            .step-connector {
+                margin-top: .9rem;
+                width: 30px;
+                height: 2px;
+            }
+
+            .name-fields {
                 flex-direction: column;
                 gap: 0.5rem;
             }
         }
+
     </style>
 </head>
 <body>
@@ -537,6 +574,7 @@
         <div class="booking-card">
             <h1>Book Your Escape Adventure</h1>
             
+            <div id="step-indicator-sentinel" style="height: 1px; margin-top: -1px;"></div>
             <div class="step-indicator">
                 <div class="step active" id="step-1">
                     <div class="step-number">1</div>
@@ -601,10 +639,11 @@
                         </div>
                         <input type="hidden" id="people-count" name="people-count" value="2">
                     </div>
-
+                    
+                    <h3 style="margin-bottom: 0.5rem; color: #2b2b2b;">Contact Person</h3>
                     <div class="form-group name-fields">
                         <div>
-                            <label for="contact-first-name">Contact Person First Name *</label>
+                            <label for="contact-first-name">First Name *</label>
                             <input type="text" id="contact-first-name" name="contact-first-name" required>
                         </div>
                         <div>
@@ -625,7 +664,7 @@
 
                     <div class="form-group">
                         <label for="special-requests">Special Requests or Notes</label>
-                        <textarea id="special-requests" name="special-requests" rows="3" placeholder="Any special accommodations, dietary restrictions, or questions..."></textarea>
+                        <textarea id="special-requests" name="special-requests" rows="3" placeholder="Any special accommodations, or questions..."></textarea>
                     </div>
 
                     <button type="submit" class="submit-btn">Complete Booking</button>
@@ -844,7 +883,7 @@
             });
 
             selectedEventSummary.innerHTML = `
-                <div style="background: #f0f8ff; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <div class="summary">
                     <h3 style="margin: 0 0 0.5rem 0; color: #2b2b2b;">Selected Event</h3>
                     <p style="margin: 0;"><strong>${selectedEvent.event.summary || 'Escape Room Event'}</strong></p>
                     <p style="margin: 0.25rem 0 0 0; color: #666;">${date} • ${selectedEvent.event.location || 'TBD'}</p>
@@ -974,7 +1013,7 @@
                 'All Day';
 
             container.innerHTML = `
-                <div style="background: #f0f8ff; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <div class="summary">
                     <h3 style="margin: 0 0 0.5rem 0; color: #2b2b2b;">Selected Booking</h3>
                     <p style="margin: 0;"><strong>${selectedEvent.event.summary || 'Escape Room Event'}</strong></p>
                     <p style="margin: 0.25rem 0 0 0; color: #666;">${date} at ${timeString}</p>
@@ -1128,7 +1167,34 @@
             setupPeopleCounter();
             setupFormSubmission();
         });
-        document.getElementById('change-event-btn').addEventListener('click', () => {
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const stepIndicator = document.querySelector('.step-indicator');
+            const sentinel = document.getElementById('step-indicator-sentinel');
+            if (!stepIndicator || !sentinel) return;
+
+            const observer = new IntersectionObserver(
+                ([entry]) => {
+                    if (!entry.isIntersecting) {
+                        stepIndicator.classList.add('stuck');
+                    } else {
+                        stepIndicator.classList.remove('stuck');
+                    }
+                },
+                { threshold: [0] }
+            );
+            observer.observe(sentinel);
+        });
+
+        document.getElementById('change-event-btn').addEventListener('click', handleChangeEvent);
+
+        document.getElementById('step-1').addEventListener('click', function() {
+            // Only allow if not already on step 1
+            if (!document.getElementById('step-1').classList.contains('active')) {
+                handleChangeEvent();
+            }
+        });
+        function handleChangeEvent() {
             // Show all event cards again
             document.querySelectorAll('.event-card').forEach(card => {
                 card.style.display = '';
@@ -1146,8 +1212,7 @@
             selectedTimeSlot = null;
             // Scroll to event selection
             document.getElementById('event-selection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-
+        }
         // Handle direct event booking from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const eventId = urlParams.get('event');
