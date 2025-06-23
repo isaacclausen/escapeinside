@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="theme-color" content="rgba(43, 43, 43, 0.9)">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bring Escape Inside to your event.</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #EBE3CC 0%, #f5f0e1 50%, #EBE3CC 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(43, 43, 43, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header img {
+            height: 40px;
+            margin-right: 1rem;
+        }
+
+        .back-link {
+            color: #EBE3CC;
+            text-decoration: none;
+            text-align: right;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .booking-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .booking-card h1 {
+            color: #2b2b2b;
+            text-align: center;
+            font-size: 1.5rem;
+            margin:0.5rem 0rem;
+            background: linear-gradient(45deg, #2b2b2b, #555);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro-text {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #2b2b2b, #444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        .cost-calculator {
+            background: rgba(247, 244, 236, 0.8);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(43, 43, 43, 0.1);
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .calculator-header h2 {
+            color: #2b2b2b;
+            font-size: 1.8rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .calculator-header p {
+            color: #666;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .slider-group {
+            margin-bottom: 2rem;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            color: #2b2b2b;
+        }
+
+        .slider-value {
+            background: #2b2b2b;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            transition: background 0.3s;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #2b2b2b;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: #444;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #2b2b2b;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        .slider::-moz-range-thumb:hover {
+            background: #444;
+        }
+
+        .cost-breakdown {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(43, 43, 43, 0.1);
+        }
+
+        .cost-breakdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 1rem;
+
+        }
+
+        .cost-breakdown h3 {
+            color: #2b2b2b;
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #2b2b2b;
+            border-top: 2px solid #2b2b2b;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .cost-item span:last-child {
+            font-weight: bold;
+            color: #2b2b2b;
+        }
+
+        .capacity-inline {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-left: 1.5rem;
+            padding: .5rem .8rem;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        #capacity-number {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .capacity-label {
+            font-size: 0.95rem;
+            color: white;
+            font-weight: normal;
+        }
+        .capacity-tooltip {
+            display: none;
+            position: absolute;
+            bottom: -30%;
+            left: -100%;
+            transform: translateX(-50%);
+            background: #2b2b2b;
+            color: #fff;
+            padding: 0.6em 1em;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            white-space: pre-line;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            z-index: 10;
+            width: 220px;
+            text-align: center;
+        }
+        .capacity-inline:hover .capacity-tooltip,
+        .capacity-inline:focus .capacity-tooltip {
+            display: block;
+        }
+
+        .form-section {
+            margin-top: 2rem;
+        }
+
+        .form-section h2 {
+            color: #2b2b2b;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2b2b2b;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #fff;
+            color: #2b2b2b;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.2em;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2b2b2b;
+        }
+
+        .name-fields {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .name-fields > div {
+            flex: 1;
+        }
+
+        .date-time-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #2b2b2b, #444);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(43, 43, 43, 0.1);
+        }
+
+        .info-card h3 {
+            color: #2b2b2b;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            color: #666;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .confirmation-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(43,43,43,0.85);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.4s;
+        }
+
+        .confirmation-message {
+            position: relative;
+            z-index: 1001;
+            max-width: 95vw;
+            min-width: 320px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+            padding: 2.5rem 2rem 2rem 2rem;
+            text-align: center;
+            animation: popIn 0.4s;
+        }
+
+        .confirmation-message h2 {
+            color: #2b2b2b;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .confirmation-message p {
+            color: #444;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .confirmation-message .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            background: linear-gradient(45deg, #2b2b2b, #444);
+            color: #fff;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .confirmation-message .back-link:hover {
+            background: linear-gradient(45deg, #444, #2b2b2b);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.95);}
+            to { opacity: 1; transform: scale(1);}
+        }
+
+        @media (max-width: 600px) {
+            .booking-card {
+                padding: 1rem;
+            }
+
+            .booking-card h1 {
+                font-size: 1.8rem;
+            }
+
+            .cost-calculator {
+                padding: 1rem;
+            }
+
+            .cost-breakdown-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+            .capacity-inline {
+                align-items: flex-start;
+                margin-left: 0;
+                margin-top: 0.2rem;
+            }
+
+            .capacity-info {
+                padding: 1.5rem;
+            }
+
+            .capacity-number {
+                font-size: 2.5rem;
+            }
+
+            .capacity-tooltip {
+                left: 50%;
+                right: auto;
+                top: 110%;
+                bottom: auto;
+                transform: translateX(-50%);
+            }
+
+            .form-group select {
+                font-size: 1rem;
+                padding: 0.75rem;
+            }
+
+            .name-fields {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .date-time-fields {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .date-time-fields input[type="date"],
+            .date-time-fields input[type="time"] {
+                width: 100% !important;
+                min-width: 0;
+                box-sizing: border-box;
+                background: #fff !important;
+                color: #2b2b2b !important;
+                border: 2px solid #ddd;
+                border-radius: 8px;
+                height: 3rem;   
+                padding: 0.75rem;
+                font-size: 1rem;
+                appearance: none;
+                -webkit-appearance: none;
+            }
+
+            /* iOS-specific fix for left-aligning date/time input text */
+            input[type="date"]::-webkit-input-placeholder,
+            input[type="time"]::-webkit-input-placeholder {
+                text-align: left;
+            }
+            input[type="date"],
+            input[type="time"] {
+                -webkit-text-align-last: left;
+                text-align-last: left;
+            }
+
+            .info-cards {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <img src="Escape Inside Logo Light No Tagline.svg" alt="Escape Inside Logo" />
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="booking-card">
+            <h1>Bring the escape room experience to your event</h1>
+            <div class="intro-text">
+                Bring the excitement of an escape room to <span class="highlight">your location</span>! 
+                Perfect for corporate events, birthday parties, team building, or any special occasion.
+            </div>
+
+            <div class="info-cards">
+                <div class="info-card">
+                    <h3>🚐 We Come to You</h3>
+                    <p>Our mobile escape room trailer brings the full experience to your event location</p>
+                </div>
+                <div class="info-card">
+                    <h3>✅ Full Escape Room Experience</h3>
+                    <p>Even though we're mobile, you get a real, immersive escape room adventure</p>
+                </div>
+                <div class="info-card">
+                    <h3>👥 Perfect for Groups</h3>
+                    <p>8-10 people can experience the escape room each hour</p>
+                </div>
+                <div class="info-card">
+                    <h3>🎉 Any Occasion</h3>
+                    <p>Corporate events, parties, festivals, team building, and more</p>
+                </div>
+            </div>
+
+            <div class="cost-calculator">
+                <div class="calculator-header">
+                    <h2>Cost Calculator</h2>
+                    <p>Adjust the sliders below to see your custom pricing</p>
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Distance from Orange City, IA</span>
+                        <span class="slider-value" id="distance-value">10 miles</span>
+                    </div>
+                    <input type="range" min="0" max="200" value="10" class="slider" id="distance-slider">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Duration at your event</span>
+                        <span class="slider-value" id="duration-value">3 hours</span>
+                    </div>
+                    <input type="range" min="2" max="12" value="3" class="slider" id="duration-slider">
+                </div>
+
+                <div class="cost-breakdown">
+                    <div class="cost-breakdown-header">
+                        <h3>Cost Breakdown</h3>
+                        <div class="capacity-inline">
+                            <span id="capacity-number">24-30</span>
+                            <span class="capacity-label">people</span>
+                            <span class="capacity-tooltip">Can experience the escape room with a group of 8-10 going through per hour</span>
+                        </div>
+                    </div>
+                    <div class="cost-item">
+                        <span>Base Rate</span>
+                        <span id="base-cost">$400</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Travel Cost</span>
+                        <span id="travel-cost">$20</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Additional Hours</span>
+                        <span id="additional-hours-cost">$0</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Total Cost</span>
+                        <span id="total-cost">$420</span>
+                    </div>
+                </div>
+            </div>
+
+            <form class="form-section" id="booking-form">
+                <h2>Book Your Mobile Escape Room</h2>
+
+                <div class="form-group">
+                    <label for="event-type">Event Type</label>
+                    <select id="event-type" name="event-type" required>
+                        <option value="">Select your event type</option>
+                        <option value="corporate">Corporate Event</option>
+                        <option value="birthday">Birthday Party</option>
+                        <option value="team-building">Team Building</option>
+                        <option value="school">School Event</option>
+                        <option value="festival">Festival/Fair</option>
+                        <option value="wedding">Wedding</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group name-fields">
+                    <div>
+                        <label for="contact-first-name">First Name *</label>
+                        <input type="text" id="contact-first-name" name="contact-first-name" required>
+                    </div>
+                    <div>
+                        <label for="contact-last-name">Last Name *</label>
+                        <input type="text" id="contact-last-name" name="contact-last-name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-email">Email Address *</label>
+                    <input type="email" id="contact-email" name="contact-email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-phone">Phone Number *</label>
+                    <input type="tel" id="contact-phone" name="contact-phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="organization">Organization/Company</label>
+                    <input type="text" id="organization" name="organization" placeholder="Optional">
+                </div>
+
+                <div class="form-group date-time-fields">
+                    <div>
+                        <label for="event-date">Preferred Date *</label>
+                        <input type="date" id="event-date" name="event-date" required>
+                    </div>
+                    <div>
+                        <label for="event-time">Preferred Start Time *</label>
+                        <input type="time" id="event-time" name="event-time" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-location">Event Location *</label>
+                    <input type="text" id="event-location" name="event-location" placeholder="Full address including city, state" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="expected-participants">Expected Number of Participants</label>
+                    <input type="number" id="expected-participants" name="expected-participants" min="1" max="200" placeholder="How many people will participate?">
+                </div>
+
+                <div class="form-group">
+                    <label for="special-requests">Special Requests or Additional Information</label>
+                    <textarea id="special-requests" name="special-requests" rows="4" placeholder="Any specific requirements, accessibility needs, or questions..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Request Mobile Escape Room Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="confirmation-overlay" class="confirmation-overlay" style="display: none;">
+        <div class="confirmation-message">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" style="margin-bottom: 1rem;">
+              <circle cx="30" cy="30" r="30" fill="#4CAF50"/>
+              <path d="M18 32L27 41L43 23" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h2>Request Submitted!</h2>
+            <p>Thank you for your mobile escape room request.<br>We'll contact you within 24 hours to confirm details and availability.</p>
+            <div id="confirmation-details"></div>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        let distance = 10;
+        let duration = 3;
+        const baseCost = 400;
+        const travelCostPerMile = 2;
+        const additionalHourCost = 100;
+
+        function updateCalculator() {
+            // Update display values
+            document.getElementById('distance-value').textContent = `${distance} mile${distance !== 1 ? 's' : ''}`;
+            document.getElementById('duration-value').textContent = `${duration} hour${duration !== 1 ? 's' : ''}`;
+
+            // Calculate costs
+            const travelCost = distance * travelCostPerMile;
+            const additionalHoursCost = Math.max(0, duration - 2) * additionalHourCost;
+            const totalCost = baseCost + travelCost + additionalHoursCost;
+
+            // Update cost display
+            document.getElementById('base-cost').textContent = `$${baseCost}`;
+            document.getElementById('travel-cost').textContent = `$${travelCost}`;
+            document.getElementById('additional-hours-cost').textContent = `$${additionalHoursCost}`;
+            document.getElementById('total-cost').textContent = `$${totalCost}`;
+
+            // Update capacity (8-10 people per hour)
+            const minCapacity = duration * 8;
+            const maxCapacity = duration * 10;
+            document.getElementById('capacity-number').textContent = `${minCapacity}-${maxCapacity}`;
+        }
+
+        function setupSliders() {
+            const distanceSlider = document.getElementById('distance-slider');
+            const durationSlider = document.getElementById('duration-slider');
+
+            distanceSlider.addEventListener('input', (e) => {
+                distance = parseInt(e.target.value);
+                updateCalculator();
+            });
+
+            durationSlider.addEventListener('input', (e) => {
+                duration = parseInt(e.target.value);
+                updateCalculator();
+            });
+        }
+
+        function setupForm() {
+            const form = document.getElementById('booking-form');
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('event-date').setAttribute('min', today);
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                const bookingData = {
+                    eventType: formData.get('event-type'),
+                    contactFirstName: formData.get('contact-first-name'),
+                    contactLastName: formData.get('contact-last-name'),
+                    contactEmail: formData.get('contact-email'),
+                    contactPhone: formData.get('contact-phone'),
+                    organization: formData.get('organization'),
+                    eventDate: formData.get('event-date'),
+                    eventTime: formData.get('event-time'),
+                    eventLocation: formData.get('event-location'),
+                    expectedParticipants: formData.get('expected-participants'),
+                    specialRequests: formData.get('special-requests'),
+                    distance: distance,
+                    duration: duration,
+                    estimatedCost: document.getElementById('total-cost').textContent
+                };
+
+                // Create details HTML for confirmation
+                const eventDate = new Date(bookingData.eventDate);
+                const formattedDate = eventDate.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                const detailsHtml = `
+                    <div style="background: #f8f8f8; border-radius: 10px; padding: 1.2rem; margin: 1.5rem auto; text-align: left; max-width: 400px;">
+                        <h3 style="margin: 0 0 0.5rem 0; color: #2b2b2b;">Request Details</h3>
+                        <p><strong>Event:</strong> ${bookingData.eventType}</p>
+                        <p><strong>Date:</strong> ${formattedDate}</p>
+                        <p><strong>Time:</strong> ${bookingData.eventTime}</p>
+                        <p><strong>Duration:</strong> ${duration} hours</p>
+                        <p><strong>Location:</strong> ${bookingData.eventLocation}</p>
+                        <p><strong>Contact:</strong> ${bookingData.contactFirstName} ${bookingData.contactLastName}</p>
+                        <p><strong>Email:</strong> ${bookingData.contactEmail}</p>
+                        <p><strong>Phone:</strong> ${bookingData.contactPhone}</p>
+                        <p><strong>Expected Cost:</strong> ${bookingData.estimatedCost}</p>
+                        ${bookingData.expectedParticipants ? `<p><strong>Participants:</strong> ${bookingData.expectedParticipants}</p>` : ''}
+                    </div>
+                `;
+
+                // In a real implementation, you would send this data to your server
+                console.log('Mobile escape room booking request:', bookingData);
+
+                // Show confirmation
+                document.getElementById('confirmation-details').innerHTML = detailsHtml;
+                document.getElementById('confirmation-overlay').style.display = 'flex';
+                
+                // Reset form
+                form.reset();
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            setupSliders();
+            setupForm();
+            updateCalculator();
+        });
+    </script>
+</body>
+</html>
