@@ -16,7 +16,7 @@
         .header {
             background: rgba(43, 43, 43, 0.9);
             backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
+            padding: 1rem 1rem;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
@@ -30,6 +30,7 @@
 
         .header img {
             height: 40px;
+            margin: 0 1rem;
         }
 
         .back-link {
@@ -806,8 +807,13 @@
                     day: 'numeric'
                 });
 
-                // Count available time slots
-                const availableSlots = group.timeSlots.length;
+                // Only count slots that start at least 1 hour from now
+                const now = Date.now();
+                const availableSlots = group.timeSlots.filter(slot => {
+                    const slotStart = new Date(slot.start.dateTime || slot.start.date).getTime();
+                    return slotStart >= now + 60 * 60 * 1000;
+                }).length;
+
                 const slotStatusHtml = availableSlots > 0
                     ? `<div class="slots-available">${availableSlots} time slot${availableSlots !== 1 ? 's' : ''} available</div>`
                     : `<div class="slots-unavailable">Sold Out</div>`;
@@ -898,77 +904,84 @@
         }
 
         function renderTimeSlots() {
-    const container = document.getElementById('time-slots-container');
-    container.innerHTML = '';
+            const container = document.getElementById('time-slots-container');
+            container.innerHTML = '';
 
-    if (!selectedEvent) {
-        console.error('No event selected.');
-        return;
-    }
-
-    // Use the selected event's date and time range
-    const eventStart = new Date(selectedEvent.event.start.dateTime || selectedEvent.event.start.date).getTime();
-    const eventEnd = new Date(selectedEvent.event.end?.dateTime || selectedEvent.event.end?.date || eventStart + 4 * 60 * 60 * 1000).getTime(); // Default to 4 hours if no end time
-    const timeSlotDuration = 90 * 60 * 1000; // 1.5 hours in milliseconds
-
-    let slotStartTime = eventStart;
-
-    while (slotStartTime < eventEnd) {
-        const slotEndTime = slotStartTime + timeSlotDuration;
-
-        // Check if the slot overlaps with any public event (excluding the selected event)
-        const isSlotOccupiedByEvent = allEvents.some(event => {
-            if (event.id === selectedEvent.event.id) {
-                return false; // Exclude the selected event
+            if (!selectedEvent) {
+                console.error('No event selected.');
+                return;
             }
 
-            const eventStart = new Date(event.start.dateTime || event.start.date).getTime();
-            const eventEnd = new Date(event.end.dateTime || event.end.date).getTime();
+            // Use the selected event's date and time range
+            const eventStart = new Date(selectedEvent.event.start.dateTime || selectedEvent.event.start.date).getTime();
+            const eventEnd = new Date(selectedEvent.event.end?.dateTime || selectedEvent.event.end?.date || eventStart + 4 * 60 * 60 * 1000).getTime(); // Default to 4 hours if no end time
+            const timeSlotDuration = 90 * 60 * 1000; // 1.5 hours in milliseconds
 
-            return slotStartTime < eventEnd && slotEndTime > eventStart;
-        });
+            let slotStartTime = eventStart;
 
-        // Check if the slot is marked unavailable in the availability calendar
-        const isSlotUnavailable = allAvailabilityEvents.some(event => {
-            const eventStart = new Date(event.start.dateTime || event.start.date).getTime();
-            const eventEnd = new Date(event.end.dateTime || event.end.date).getTime();
+            while (slotStartTime < eventEnd) {
+                const slotEndTime = slotStartTime + timeSlotDuration;
 
-            return slotStartTime < eventEnd && slotEndTime > eventStart;
-        });
+                    // Skip slots that start within the next hour
+                const now = Date.now();
+                if (slotStartTime < now + 60 * 60 * 1000) {
+                    slotStartTime = slotEndTime;
+                    continue;
+                }
 
-        // Determine if the slot is available
-        const isSlotAvailable = !isSlotOccupiedByEvent && !isSlotUnavailable;
+                // Check if the slot overlaps with any public event (excluding the selected event)
+                const isSlotOccupiedByEvent = allEvents.some(event => {
+                    if (event.id === selectedEvent.event.id) {
+                        return false; // Exclude the selected event
+                    }
 
-        const timeSlot = document.createElement('div');
-        timeSlot.className = `time-slot ${isSlotAvailable ? '' : 'unavailable'}`;
-        timeSlot.dataset.slotIndex = slotStartTime;
+                    const eventStart = new Date(event.start.dateTime || event.start.date).getTime();
+                    const eventEnd = new Date(event.end.dateTime || event.end.date).getTime();
 
-        // Display only the first hour of the slot
-        const startTime = new Date(slotStartTime);
-        const displayedEndTime = new Date(slotStartTime + 60 * 60 * 1000); // 1 hour after the start time
+                    return slotStartTime < eventEnd && slotEndTime > eventStart;
+                });
 
-        const timeString = `${startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} - ${displayedEndTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`;
+                // Check if the slot is marked unavailable in the availability calendar
+                const isSlotUnavailable = allAvailabilityEvents.some(event => {
+                    const eventStart = new Date(event.start.dateTime || event.start.date).getTime();
+                    const eventEnd = new Date(event.end.dateTime || event.end.date).getTime();
 
-        timeSlot.innerHTML = `
-            <div class="time-slot-time">${timeString}</div>
-        `;
+                    return slotStartTime < eventEnd && slotEndTime > eventStart;
+                });
 
-        if (isSlotAvailable) {
-            // Capture the current slot's times in local variables
-            const slotStart = slotStartTime;
-            const slotEnd = slotStartTime + 60 * 60 * 1000; // 1 hour after start
+                // Determine if the slot is available
+                const isSlotAvailable = !isSlotOccupiedByEvent && !isSlotUnavailable;
 
-            timeSlot.addEventListener('click', () => selectTimeSlot(
-                { start: { dateTime: new Date(slotStart).toISOString() }, end: { dateTime: new Date(slotEnd).toISOString() } },
-                null,
-                timeSlot
-            ));
+                const timeSlot = document.createElement('div');
+                timeSlot.className = `time-slot ${isSlotAvailable ? '' : 'unavailable'}`;
+                timeSlot.dataset.slotIndex = slotStartTime;
+
+                // Display only the first hour of the slot
+                const startTime = new Date(slotStartTime);
+                const displayedEndTime = new Date(slotStartTime + 60 * 60 * 1000); // 1 hour after the start time
+
+                const timeString = `${startTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} - ${displayedEndTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`;
+
+                timeSlot.innerHTML = `
+                    <div class="time-slot-time">${timeString}</div>
+                `;
+
+                if (isSlotAvailable) {
+                    // Capture the current slot's times in local variables
+                    const slotStart = slotStartTime;
+                    const slotEnd = slotStartTime + 60 * 60 * 1000; // 1 hour after start
+
+                    timeSlot.addEventListener('click', () => selectTimeSlot(
+                        { start: { dateTime: new Date(slotStart).toISOString() }, end: { dateTime: new Date(slotEnd).toISOString() } },
+                        null,
+                        timeSlot
+                    ));
+                }
+
+                container.appendChild(timeSlot);
+                slotStartTime = slotEndTime;
+            }
         }
-
-        container.appendChild(timeSlot);
-        slotStartTime = slotEndTime;
-    }
-}
 
         function selectTimeSlot(slot, index, slotElement) {
             // Remove previous selection

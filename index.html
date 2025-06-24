@@ -155,34 +155,65 @@
         max-width: 600px;
       }
 
+      .book-now-row {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 0rem 2.5rem;
+        margin: 0rem 0rem 1rem;
+        flex-wrap: wrap;
+      }
+
+      .book-now-card {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        background: rgba(255,255,255,0.85);
+        border-radius: 1.5em;
+        box-shadow: 0 2px 12px rgba(176,156,106,0.10);
+        padding: 1.1em 1.5em 1.1em 1.5em;
+        min-width: 210px;
+        margin: 0.5rem 0;
+        transition: box-shadow 0.2s;
+        gap: 0.2em;
+      }
+
+      .book-now-card:hover {
+        box-shadow: 0 6px 24px rgba(176,156,106,0.18);
+      }
+
+      .book-now-label {
+        background: none;
+        border: none;
+        box-shadow: none;
+        font-size: 1.08rem;
+        font-weight: 600;
+        color: #1A281E;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5em;
+        padding: 0;
+      }
+
       .book-now {
         display: block;
-        margin: 1.5rem auto 1rem auto;
+        margin: 0;
         background: #7c3f2c;
         color: #fff;
         font-weight: bold;
         font-size: 1.15rem;
-        border-radius: 17px;
+        border-radius: 1.5em;
         text-align: center;
         text-decoration: none;
-        padding: 0.8rem 2.2rem;
+        padding: 0.8rem 1.5rem;
         box-shadow: 0 2px 8px rgba(41,51,56,0.07);
-        width: fit-content;
         transition: background 0.2s;
+        border: none;
       }
+
       .book-now:hover {
         background: #a05a3c;
-      }
-
-      .book-now-row {
-        display: flex;
-        justify-content: center;
-        gap: 1.2rem;
-        margin: 1.5rem auto 1rem auto;
-      }
-
-      .book-now-row .book-now {
-        margin: 0;
       }
 
       .events-table {
@@ -196,6 +227,10 @@
         background: #fff;
       }
 
+      .events-table td:nth-child(2) {
+        padding-left: 1.2rem;
+      }
+
       .events-table th, .events-table td {
         padding: .8rem;
         text-align: left;
@@ -205,6 +240,7 @@
       .events-table th {
         background-color: #f7f4ec;
         font-weight: bold;
+        padding-left: 1.2rem;
       }
       .events-table thead th:first-child {
         border-top-left-radius: 14px;
@@ -227,6 +263,17 @@
 
       .events-table tbody tr:hover {
         background-color: #f0ece1;
+      }
+
+      .events-table tbody tr:last-child:hover {
+        background-color: transparent;
+      }
+
+      .events-table tbody tr:last-child:hover,
+      .events-table tbody tr:last-child:hover td:nth-child(2) {
+        background-color: #f0ece1;
+        border-bottom-left-radius: 14px;
+        overflow: hidden;
       }
 
       .book-link {
@@ -303,7 +350,21 @@
         .info-text {
           font-size: 1rem;
           max-width: 95vw;
-        }        
+        }
+        .book-now-row {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0rem;
+          margin: 0rem 0.5rem 1rem;
+        }
+        .book-now-card {
+          min-width: 0;
+          padding: 1.2em;
+        }
+        .book-now-label {
+          font-size: 1rem;
+          margin-bottom: 0.15em;
+        }
         .events-table {
           box-shadow: none;
           background: none;
@@ -422,8 +483,14 @@
               </div>
             </div>
             <div class="book-now-row">
-              <a href="booking.html" class="book-now">Find Us</a>
-              <a href="host-booking.html" class="book-now host-link">Host Us</a>
+              <div class="book-now-card">
+                <span class="book-now-label fancy-label">Escape at one of our stops</span>
+                <a href="booking.html" class="book-now">Find Us</a>
+              </div>
+              <div class="book-now-card">
+                <span class="book-now-label fancy-label">Have us come to your event</span>
+                <a href="host-booking.html" class="book-now host-link">Host Us</a>
+              </div>
             </div>
           </div>
           <!-- 📸 Image Gallery -->
