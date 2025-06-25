@@ -359,6 +359,23 @@
             transform: none;
         }
 
+        .submit-btn.loading::after {
+            content: "";
+            display: inline-block;
+            margin-left: 0.7em;
+            width: 1em;
+            height: 1em;
+            border: 2px solid #fff;
+            border-top: 2px solid #b09c6a;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .loading {
             text-align: center;
             padding: 2rem;
@@ -1083,6 +1100,9 @@
         // Form submission
         function setupFormSubmission() {
             const form = document.getElementById('booking-form-element');
+            const submitBtn = form.querySelector('.submit-btn');
+            let originalBtnText = submitBtn.textContent;
+
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
@@ -1091,44 +1111,48 @@
                     return;
                 }
 
-                // Collect form data
-                const formData = new FormData(form);
-                const bookingData = {
-                    event: selectedEvent.event,
-                    timeSlot: selectedTimeSlot,
-                    peopleCount: formData.get('people-count'),
-                    contactFirstName: formData.get('contact-first-name'),
-                    contactLastName: formData.get('contact-last-name'),
-                    contactEmail: formData.get('contact-email'),
-                    contactPhone: formData.get('contact-phone'),
-                    specialRequests: formData.get('special-requests')
-                };
+                // Show loading state
+                submitBtn.classList.add('loading');
 
-                // Compose description for calendar event
-                const description = `
-                    Booking for: ${bookingData.event.summary}
-                    Name: ${bookingData.contactFirstName} ${bookingData.contactLastName}
-                    Email: ${bookingData.contactEmail}
-                    Phone: ${bookingData.contactPhone}
-                    People: ${bookingData.peopleCount}
-                    Special Requests: ${bookingData.specialRequests || 'None'}
-                `.trim();
-
-                // Prepare event data for Google Calendar
-                const calendarEvent = {
-                    summary: `${bookingData.contactLastName} Group`,
-                    description,
-                    start: { dateTime: bookingData.timeSlot.start.dateTime },
-                    end: { dateTime: bookingData.timeSlot.end.dateTime },
-                };
-
-                // Send to Worker
                 try {
+                    // Collect form data
+                    const formData = new FormData(form);
+                    const bookingData = {
+                        event: selectedEvent.event,
+                        timeSlot: selectedTimeSlot,
+                        peopleCount: formData.get('people-count'),
+                        contactFirstName: formData.get('contact-first-name'),
+                        contactLastName: formData.get('contact-last-name'),
+                        contactEmail: formData.get('contact-email'),
+                        contactPhone: formData.get('contact-phone'),
+                        specialRequests: formData.get('special-requests')
+                    };
+
+                    // Compose description for calendar event
+                    const description = `
+                        Booking for: ${bookingData.event.summary}
+                        Name: ${bookingData.contactFirstName} ${bookingData.contactLastName}
+                        Email: ${bookingData.contactEmail}
+                        Phone: ${bookingData.contactPhone}
+                        People: ${bookingData.peopleCount}
+                        Special Requests: ${bookingData.specialRequests || 'None'}
+                    `.trim();
+
+                    // Prepare event data for Google Calendar
+                    const calendarEvent = {
+                        summary: `${bookingData.contactLastName} Group`,
+                        description,
+                        start: { dateTime: bookingData.timeSlot.start.dateTime },
+                        end: { dateTime: bookingData.timeSlot.end.dateTime },
+                        location: bookingData.event.location || "TBD"
+                    };
+
+                    // Send to Worker
                     const response = await fetch('https://escape-calendar-proxy.isaacclausen.workers.dev/book', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            calendarId: '8e6f98a0453e37a212e5a5c95cf3b03c48e751c678874a5d695975fb7037cdb3@group.calendar.google.com', // Availability calendar
+                            calendarId: '8e6f98a0453e37a212e5a5c95cf3b03c48e751c678874a5d695975fb7037cdb3@group.calendar.google.com',
                             event: calendarEvent,
                             contactFirstName: bookingData.contactFirstName,
                             contactLastName: bookingData.contactLastName,
@@ -1171,6 +1195,11 @@
                     }
                 } catch (err) {
                     alert('Booking failed: ' + err.message);
+                } finally {
+                    // Restore button state
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
                 }
             });
         }
