@@ -10,11 +10,31 @@
       }
       body {
         background: linear-gradient(135deg, #EBE3CC 0%, #f5f0e1 50%, #EBE3CC 100%);
+        /* background: linear-gradient(to top, #f7c873 20%, #f4845f 30%, #ebe3cc 50%, #EBE3CC 100%); */
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
         padding: 0;
         min-height: 100vh;
         overflow-x: hidden;
+      }
+
+      body::after {
+        content: "";
+        pointer-events: none;
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        /* Sunset gradient on top */
+        background: linear-gradient(
+          to top,
+          #f7c873 10%,
+          #f4845f 30%,
+          #a0c3d5 50%,
+          #322b63 100%
+        );
+        opacity: 0;
+        transition: opacity 0.2s linear;
+        opacity: var(--sunset-fade, 0);
       }
 
       /* 🖼 Banner container with relative positioning */
@@ -61,10 +81,11 @@
         font-weight: bold;
         font-size: 1rem;
         text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        transition: transform 0.2s ease;
       }
 
       .nav-links a:hover {
-        text-decoration: underline;
+        transform: scale(1.1);
       }
 
       /* 🧩 Main logo and content */
@@ -198,7 +219,7 @@
         align-items: center;
         background: #1A281E;
         border-radius: 20px;
-        box-shadow: 0 2px 12px rgba(41,51,56,0.06);
+        box-shadow: 0 2px 12px rgba(41, 51, 56, 0.268);
         padding: 1.1em 1.5em 1.1em 1.5em;
         min-width: 210px;
         margin: 0.5rem 0;
@@ -229,7 +250,7 @@
         display: block;
         width: 50%;
         margin: 0;
-        background: #7c3f2c;
+        background: #45694f;
         color: #EBE3CC;
         font-weight: bold;
         font-size: 1.15rem;
@@ -237,13 +258,15 @@
         text-align: center;
         text-decoration: none;
         padding: 0.8rem 1.5rem;
-        box-shadow: 0 2px 8px rgba(41,51,56,0.07);
-        transition: background 0.2s;
+        box-shadow: 0 2px 8px rgba(76, 157, 81, 0.453);
+        transition: box-shadow 0.2s, background 0.2s;
         border: none;
       }
 
       .book-now:hover {
-        background: #a05a3c;
+        background: #629570;
+        box-shadow: 0 2px 8px rgba(89, 162, 94, 0.856);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
       }
 
       .events-table {
@@ -354,6 +377,81 @@
         display: none;
       } 
 
+      .host-cta-card {
+        width: 60%;
+        max-width: 530px;
+        margin: 2.5rem auto 2.5rem auto;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 18px;
+        box-shadow: 0 4px 18px rgba(176,156,106,0.13);
+        padding: 1.5rem 1.5rem 1rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .host-cta-heading {
+        color: #2b2b2b;
+        font-size: 1.4rem;
+        margin: 0;
+        letter-spacing: 0.01em;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.08);
+      }
+
+      .host-cta-text {
+        color: #000;
+        font-size: .9rem;
+        margin: 1rem 0;
+        font-weight: 500;
+      }
+
+      .host-cta-btn {
+        display:block;
+        margin: 1rem 1rem 0.5rem 1rem;
+        background: #1A281E;
+        color: #EBE3CC;
+        font-weight: bold;
+        font-size: 1.15rem;
+        border-radius: 14px;
+        text-align: center;
+        text-decoration: none;
+        padding: 0.8rem 1.5rem;
+        box-shadow: 0 2px 8px rgba(54, 51, 36, 0.28);
+        transition: box-shadow 0.2s, background 0.2s;
+        border: none;
+      }
+
+      .host-cta-btn:hover {
+        background: #385641;
+        box-shadow: 0 2px 8px rgba(54, 51, 36, 0.583);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+      }
+
+      .mountain-divider {
+        width: 100%;
+        margin: 0;
+        line-height: 0;
+        overflow: hidden;
+        display: block;
+      }
+      .mountain-divider svg {
+        width: 100%;
+        height: 60px;
+        display: block;
+        line-height: 0;
+        margin-bottom: -1px; /* Helps cover any subpixel gap */
+      }
+
+      .contact-bg {
+        background: #b09c6a;
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        padding: 1rem 0 2rem 0;
+        margin-top: -2px; /* Pulls the background up to cover any gap */
+      }
+
       .contact-section {
         max-width: 500px;
         width: 83%;
@@ -381,9 +479,9 @@
         width: 100%;
         padding: 0.6em 1em;
         border-radius: 10px;
-        border: 1.5px solid #e5dbc0;
+        border: 1.5px solid #1d2d20;
         font-size: 1.08rem;
-        background: #fff;
+        background: #101912;
         color: #2b2b2b;
         transition: border-color 0.2s, box-shadow 0.2s;
         box-sizing: border-box;
@@ -392,7 +490,7 @@
 
       .contact-section input:focus,
       .contact-section textarea:focus {
-        border-color: #b09c6a;
+        border-color: #2f4834;
         outline: none;
         box-shadow: 0 2px 8px rgba(176,156,106,0.08);
       }
@@ -554,6 +652,10 @@
           box-sizing: border-box;
         }
 
+        .host-cta-card {
+          width: 50%;
+        }
+
         .contact-section {
           padding: 1.2rem 1rem 1.2rem;
         }
@@ -561,14 +663,21 @@
           </style>
         </head>
         <body>
+            <svg id="sunset-sun-overlay"
+                style="position:fixed; left:0; top:0; width:100vw; height:100vh; pointer-events:none; z-index:-1;"
+                viewBox="0 0 1000 1000"
+                preserveAspectRatio="xMidYMid slice">
+              <circle id="sunset-sun-circle" cx="500" cy="120" r="60" fill="#ffe9a7" opacity="0.85" style="filter: blur(1.5px);" />
+            </svg>
+
           <!-- 🖼️ Banner with overlay -->
           <div class="banner-container">
             <img src="Exterior.png" alt="Escape Room Exterior" class="banner" />
             <div class="overlay-nav">
               <img src="EscapeInsideLogoLightNoTagline.svg" alt="Escape Inside Logo Light" />
               <div class="nav-links">
-                <a href="booking">Book Now</a>
-                <a href="#">About</a>
+                <a href="#events">Find Us</a>
+                <a href="host-booking">Host Us</a>
                 <a href="#contact">Contact</a>
               </div>
             </div>
@@ -624,7 +733,7 @@
             <img src="Exterior3.jpg" alt="Escape Inside Mobile Unit 3" />
           </div>
           
-          <div class="content events-section">
+          <div class="content events-section" id="events">
             <h2>Upcoming Public Events</h2>
             <table class="events-table">
               <thead>
@@ -641,22 +750,56 @@
             </table>
           </div>
 
-          <div class="contact-section" id="contact">
-            <h2>Send Us A Message</h2>
-            <form id="contact-form">
-              <div class="contact-field">
-                <input type="text" name="name" placeholder="Your Name" required>
+          <div class="host-cta-card">
+            <div class="host-cta-content">
+              <h3 class="host-cta-heading">Don't see a public event that works for you?</h3>
+              <div class="host-cta-text">
+                Host us at your own event and bring the escape room adventure to your group!
               </div>
-              <div class="contact-field">
-                <input type="email" name="email" placeholder="Your Email" required>
-              </div>
-              <div class="contact-field">
-                <textarea name="message" placeholder="Your Message" required></textarea>
-              </div>
-              <button type="submit" class="contact-btn">Send</button>
-              <div id="contact-status"></div>
-            </form>
+              <a href="host-booking" class="host-cta-btn">Host Us</a>
+            </div>
           </div>
+
+          <!-- Mountain divider before contact section -->
+          <div class="mountain-divider" aria-hidden="true" style="position:relative; z-index:2;">
+            <svg viewBox="0 0 1440 120" width="100%" height="60" preserveAspectRatio="none" style="display:block; position:relative; z-index:2;">
+              <!-- Mountain shape -->
+              <path 
+                id="mountain-shape"
+                d="M0,0 
+                  L300,80 
+                  L500,20 
+                  L700,100 
+                  L900,30 
+                  L1200,90 
+                  L1440,40 
+                  L1440,120 
+                  L0,120 
+                  Z"
+                fill="#b09c6a"
+                stroke="none"
+              />
+            </svg>
+          </div>
+
+            <div class="contact-bg">
+              <div class="contact-section" id="contact">
+                <h2>Send Us A Message</h2>
+                <form id="contact-form">
+                  <div class="contact-field">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                  </div>
+                  <div class="contact-field">
+                    <input type="email" name="email" placeholder="Your Email" required>
+                  </div>
+                  <div class="contact-field">
+                    <textarea name="message" placeholder="Your Message" required></textarea>
+                  </div>
+                  <button type="submit" class="contact-btn">Send</button>
+                  <div id="contact-status"></div>
+                </form>
+              </div>
+            </div>
       
           <script>
             fetch(`https://escape-calendar-proxy.isaacclausen.workers.dev?calendarId=9ccddeec24fa50c0880827217c1897b6d15b492d8d1519973aa7db19b0096992@group.calendar.google.com`)
@@ -696,7 +839,7 @@
                     <span style="color:#222;">${location}</span>
                   </td>
                   <td data-label="">${name}</td>                
-                  <td data-label=""><a href="/booking/?event=${eventId}" class="book-link">Book Now</a></td>
+                  <td data-label=""><a href="booking/?event=${eventId}" class="book-link">Book Now</a></td>
                 `;
                 tableBody.appendChild(row);
               });
@@ -731,6 +874,65 @@
               } catch {
                 status.textContent = "Sorry, there was a problem. Please try again later.";
               }
+            });
+
+            function lerpColor(a, b, t) {
+              // a, b: hex colors like "#b09c6a", "#322b63"
+              // t: 0 to 1
+              const ah = a.replace('#', '');
+              const bh = b.replace('#', '');
+              const ar = parseInt(ah.substring(0,2),16), ag = parseInt(ah.substring(2,4),16), ab = parseInt(ah.substring(4,6),16);
+              const br = parseInt(bh.substring(0,2),16), bg = parseInt(bh.substring(2,4),16), bb = parseInt(bh.substring(4,6),16);
+              const rr = Math.round(ar + (br-ar)*t);
+              const rg = Math.round(ag + (bg-ag)*t);
+              const rb = Math.round(ab + (bb-ab)*t);
+              return `#${rr.toString(16).padStart(2,'0')}${rg.toString(16).padStart(2,'0')}${rb.toString(16).padStart(2,'0')}`;
+            }
+
+            window.addEventListener('scroll', function() {
+              const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+              const scrollY = window.scrollY;
+              let progress = Math.max(0, Math.min(1, scrollY / docHeight));
+
+              // Fade in the sunset gradient as you scroll near the bottom (start at 60%, finish at 100%)
+              let fadeStart = 0.5;
+              let fadeEnd = 0.8;
+              let fadeProgress = (progress - fadeStart) / (fadeEnd - fadeStart);
+              fadeProgress = Math.max(0, Math.min(1, fadeProgress));
+
+              document.body.style.setProperty('--sunset-fade', fadeProgress);
+
+              // Move the sun diagonally as you scroll
+              const sun = document.getElementById('sunset-sun-circle');
+              if (sun) {
+                // Horizontal: from left (cx=120) to right (cx=880)
+                const sunStartX = 120;
+                const sunEndX = 550;
+                const cx = sunStartX + (sunEndX - sunStartX) * progress;
+
+                // Vertical: from top (cy=120) to bottom (cy=880)
+                const sunStartY = 120;
+                const sunEndY = 800;
+                const cy = sunStartY + (sunEndY - sunStartY) * progress;
+
+                sun.setAttribute('cx', cx);
+                sun.setAttribute('cy', cy);
+              }
+              const mountain = document.getElementById('mountain-shape');
+                let mountainFade = 0;
+                if (mountain) {
+                  // Transition only in the last 10% of the page
+                  mountainFade = (progress - 0.8) / 0.2;
+                  mountainFade = Math.max(0, Math.min(1, mountainFade));
+                  const color = lerpColor('#b09c6a', '#322b63', mountainFade);
+                  mountain.setAttribute('fill', color);
+                }
+                const contactBg = document.querySelector('.contact-bg');
+                if (contactBg) {
+                  // Transition from #b09c6a (gold) to #322b63 (dark blue) in the last 10% of the page
+                  const bgColor = lerpColor('#b09c6a', '#322b63', mountainFade);
+                  contactBg.style.background = bgColor;
+                }
             });
           </script>
           
