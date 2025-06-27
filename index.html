@@ -136,9 +136,8 @@
 
       .content h1 {
         color: #2b2b2b;
-        font-size: 2.2rem;
+        font-size: 1.9rem;
         margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         background: linear-gradient(45deg, #2b2b2b, #555);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -395,7 +394,7 @@
         display: none;
       } 
 
-      .host-cta-card {
+      .host-action-card {
         width: 60%;
         max-width: 530px;
         margin: 2.5rem auto 2.5rem auto;
@@ -410,22 +409,21 @@
         gap: 2rem;
       }
 
-      .host-cta-heading {
+      .host-action-heading {
         color: #2b2b2b;
         font-size: 1.4rem;
         margin: 0;
         letter-spacing: 0.01em;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.08);
       }
 
-      .host-cta-text {
+      .host-action-text {
         color: #000;
         font-size: .9rem;
         margin: 1rem 0;
         font-weight: 500;
       }
 
-      .host-cta-btn {
+      .host-action-btn {
         display:block;
         margin: 1rem 1rem 0.5rem 1rem;
         background: #1A281E;
@@ -441,7 +439,7 @@
         border: none;
       }
 
-      .host-cta-btn:hover {
+      .host-action-btn:hover {
         background: #385641;
         box-shadow: 0 2px 8px rgba(54, 51, 36, 0.583);
         text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
@@ -552,6 +550,9 @@
         }
         .banner {
           height: 100px;
+        }
+        .content h1 {
+        font-size: 1.5rem;
         }
         .info-section {
           width: 98%;
@@ -668,7 +669,7 @@
           box-sizing: border-box;
         }
 
-        .host-cta-card {
+        .host-action-card {
           width: 50%;
         }
 
@@ -703,7 +704,7 @@
           <img src="EscapeInsideLogo.svg" alt="Escape Inside Logo" class="logo" />
           <div class="content">
             <h1>Let the adventure come to you!</h1>
-            <p>Escape inside is a work in progress mobile escape room with the goal of bringing escape room adventures to your event. Check here for upcoming events that we will be attending, or send us a message if you are interested in having Escape Inside at your next gathering!</p>
+            <p>Escape Inside is a work in progress mobile escape room </p>
             <!-- Three-row info section -->
             <div class="info-section">
               <div class="info-row left">
@@ -766,13 +767,13 @@
             </table>
           </div>
 
-          <div class="host-cta-card">
-            <div class="host-cta-content">
-              <h3 class="host-cta-heading">Don't see a public event that works for you?</h3>
-              <div class="host-cta-text">
+          <div class="host-action-card">
+            <div class="host-action-content">
+              <h3 class="host-action-heading">Don't see a public event that works for you?</h3>
+              <div class="host-action-text">
                 Host us at your own event and bring the escape room adventure to your group!
               </div>
-              <a href="host-booking" class="host-cta-btn">Host Us</a>
+              <a href="host-booking" class="host-action-btn">Host Us</a>
             </div>
           </div>
 
@@ -949,6 +950,8 @@
                 const bgColor = lerpColor('#b09c6a', '#322b63', mountainFade);
                 contactBg.style.background = bgColor;
               }
+              /* this is a cover so that the gradient doesn't show when bounce scrolling past the bottom*/
+              //TODO #1 The cover displays even when not scrolled to the bottom when reloaded from the bottom on safari
               const atBottom = (scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 2);
               document.body.style.setProperty('--bottom-cover-opacity', atBottom ? '1' : '0');
             });
