@@ -18,12 +18,30 @@
         overflow-x: hidden;
       }
 
+      /* this is a cover so that the gradient doesn't show when bounce scrolling past the bottom*/
+      body::before {
+        content: "";
+        pointer-events: none;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 70vh;
+        z-index: -1;
+        opacity: var(--bottom-cover-opacity, 0);
+        background: linear-gradient(
+          to top,
+          #322b63 80%,
+          rgba(50,43,99,0.0) 100%
+        );
+      }
+
       body::after {
         content: "";
         pointer-events: none;
         position: fixed;
         inset: 0;
-        z-index: -2;
+        z-index: -3;
         /* Sunset gradient on top */
         background: linear-gradient(
           to top,
@@ -528,8 +546,6 @@
         letter-spacing: 0.01em;
       }
 
-
-
       @media (max-width: 600px) {
         .overlay-nav {
           display: none;
@@ -664,10 +680,10 @@
         </head>
         <body>
             <svg id="sunset-sun-overlay"
-                style="position:fixed; left:0; top:0; width:100vw; height:100vh; pointer-events:none; z-index:-1;"
+                style="position:fixed; left:0; top:0; width:100vw; height:100vh; pointer-events:none; z-index:-2;"
                 viewBox="0 0 1000 1000"
                 preserveAspectRatio="xMidYMid slice">
-              <circle id="sunset-sun-circle" cx="500" cy="120" r="60" fill="#ffe9a7" opacity="0.85" style="filter: blur(1.5px);" />
+              <circle id="sunset-sun-circle" cx="120" cy="120" r="60" fill="#ffe9a7" opacity="0.85" style="filter: blur(1.5px);" />
             </svg>
 
           <!-- 🖼️ Banner with overlay -->
@@ -919,20 +935,22 @@
                 sun.setAttribute('cy', cy);
               }
               const mountain = document.getElementById('mountain-shape');
-                let mountainFade = 0;
-                if (mountain) {
-                  // Transition only in the last 10% of the page
-                  mountainFade = (progress - 0.8) / 0.2;
-                  mountainFade = Math.max(0, Math.min(1, mountainFade));
-                  const color = lerpColor('#b09c6a', '#322b63', mountainFade);
-                  mountain.setAttribute('fill', color);
-                }
-                const contactBg = document.querySelector('.contact-bg');
-                if (contactBg) {
-                  // Transition from #b09c6a (gold) to #322b63 (dark blue) in the last 10% of the page
-                  const bgColor = lerpColor('#b09c6a', '#322b63', mountainFade);
-                  contactBg.style.background = bgColor;
-                }
+              let mountainFade = 0;
+              if (mountain) {
+                // Transition only in the last 10% of the page
+                mountainFade = (progress - 0.8) / 0.2;
+                mountainFade = Math.max(0, Math.min(1, mountainFade));
+                const color = lerpColor('#b09c6a', '#322b63', mountainFade);
+                mountain.setAttribute('fill', color);
+              }
+              const contactBg = document.querySelector('.contact-bg');
+              if (contactBg) {
+                // Transition from #b09c6a (gold) to #322b63 (dark blue) in the last 10% of the page
+                const bgColor = lerpColor('#b09c6a', '#322b63', mountainFade);
+                contactBg.style.background = bgColor;
+              }
+              const atBottom = (scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 2);
+              document.body.style.setProperty('--bottom-cover-opacity', atBottom ? '1' : '0');
             });
           </script>
           
